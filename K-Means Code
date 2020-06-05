@@ -1,0 +1,39 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+#In this step, the dataset was imported from the path in the directory
+dataset=pd.read_csv('C:\\Users\\rohan\\Coursera_Dataset.csv')
+#Under the column 'number of students enrolled', the values were given with 'k' or 'm' associated to denote 'number in thousands'
+#To calculate 'within cluster sum of squares' purely numerical values are required and any string character if present should be removed
+#For this purpose, I have removed the 'k' and 'm' characters using the command below
+dataset=dataset[['course_title','course_organization','course_Certificate_type','course_rating','course_students_enrolled','course_difficulty']]
+dataset['course_students_enrolled'] = dataset['course_students_enrolled'].map(lambda x: x.rstrip('km'))
+#Only those columns need to be selected which are going to define the clusters
+X=dataset.iloc[0:,3:5].values
+print(X)
+#The real algorithm implementation starts from here
+from sklearn.cluster import KMeans
+#wcss=within cluster sum of squares
+wcss=[]
+for i in range(1,11):
+    kmeans=KMeans(n_clusters=i,init='k-means++',random_state=40)
+    kmeans.fit(X)
+    wcss.append(kmeans.inertia_)
+#After successful implementation of the algorithm, now the clusters need to be visualized to gain a proper insight about how are they classified    
+plt.plot(range(1, 11), wcss)
+plt.title('The Elbow Method')
+plt.xlabel('Number of clusters')
+plt.ylabel('WCSS')
+plt.show()    
+kmeans = KMeans(n_clusters = 3, init = 'k-means++', random_state = 40)
+y_kmeans = kmeans.fit_predict(X)
+print(y_kmeans)
+plt.scatter(X[y_kmeans == 0, 0], X[y_kmeans == 0, 1], s = 100, c = 'red', label = 'Cluster 1')
+plt.scatter(X[y_kmeans == 1, 0], X[y_kmeans == 1, 1], s = 100, c = 'blue', label = 'Cluster 2')
+plt.scatter(X[y_kmeans == 2, 0], X[y_kmeans == 2, 1], s = 100, c = 'green', label = 'Cluster 3')
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s = 300, c = 'yellow', label = 'Centroids')
+plt.title('Clusters of ratings')
+plt.xlabel('Course Rating')
+plt.ylabel('Course Students Enrolled')
+plt.legend()
+plt.show()
