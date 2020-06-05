@@ -1,0 +1,7 @@
+The dataset was imported from Kaggle.
+The dataset contains information regarding the names of the courses on Coursera, course organization, course certificate type,course rating , course difficulty, number of students enrolled.
+I have figured out the classes of the courses mentioned based on course ratings and number of students enrolled in the specific course.
+I have employed the 'K-Means algorithm' to cluster the courses based on the above two parameters.
+To eliminate the risk of faulty clustering due to random initialization I have implemented the 'KMeans ++' algorithm.
+An elbow type figure was thus formed which helped to initialize the number of clusters in the code itself which was actually 3 clusters.
+The clusters were thus formed and visualized in the last step using scatter plot under matplotlib.
